@@ -164,28 +164,28 @@ module fox_swap::fox_swap {
     }
 
     public entry fun swap_coin_a_to_coin_b<CoinA, CoinB> (pool: &mut Pool<CoinA, CoinB>, coin_a: Coin<CoinA>, ctx: &mut TxContext) {
-        let swap_coin_a_amount = coin::value(&coin_a);
-        let coin_a_amount_in_pool = balance::value(&pool.coin_a_bal);
-        let coin_b_amount_in_pool = balance::value(&pool.coin_b_bal);
+        let swap_coin_a_amount = coin::value(&coin_a) as u128;
+        let coin_a_amount_in_pool = balance::value(&pool.coin_a_bal) as u128;
+        let coin_b_amount_in_pool = balance::value(&pool.coin_b_bal) as u128;
 
         assert!(swap_coin_a_amount > 0, EAmount);
 
         let new_coin_b_amount = coin_a_amount_in_pool * coin_b_amount_in_pool / (coin_a_amount_in_pool + swap_coin_a_amount);
-        let swap_coin_b_amount = coin_b_amount_in_pool - new_coin_b_amount;
+        let swap_coin_b_amount = (coin_b_amount_in_pool - new_coin_b_amount) as u64;
         balance::join(&mut pool.coin_a_bal, coin::into_balance(coin_a));
         let coin_b_balance = balance::split(&mut pool.coin_b_bal, swap_coin_b_amount);
         transfer::public_transfer(coin::from_balance(coin_b_balance, ctx), sender(ctx));
     }
 
     public entry fun swap_coin_b_to_coin_a<CoinA, CoinB> (pool: &mut Pool<CoinA, CoinB>, coin_b: Coin<CoinB>, ctx: &mut TxContext) {
-        let swap_coin_b_amount = coin::value(&coin_b);
-        let coin_a_amount_in_pool = balance::value(&pool.coin_a_bal);
-        let coin_b_amount_in_pool = balance::value(&pool.coin_b_bal);
+        let swap_coin_b_amount = coin::value(&coin_b) as u128;
+        let coin_a_amount_in_pool = balance::value(&pool.coin_a_bal) as u128;
+        let coin_b_amount_in_pool = balance::value(&pool.coin_b_bal) as u128;
 
         assert!(swap_coin_b_amount > 0, EAmount);
 
         let new_coin_a_amount = coin_b_amount_in_pool * coin_a_amount_in_pool / (coin_b_amount_in_pool + swap_coin_b_amount);
-        let swap_coin_a_amount = coin_a_amount_in_pool - new_coin_a_amount;
+        let swap_coin_a_amount = (coin_a_amount_in_pool - new_coin_a_amount) as u64;
         balance::join(&mut pool.coin_b_bal, coin::into_balance(coin_b));
         let coin_a_balance = balance::split(&mut pool.coin_a_bal, swap_coin_a_amount);
         transfer::public_transfer(coin::from_balance(coin_a_balance, ctx), sender(ctx));

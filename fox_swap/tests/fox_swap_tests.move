@@ -44,6 +44,51 @@ module fox_swap::fox_swap_tests {
             let mut pool = test_scenario::take_shared<fox_swap::Pool<FOX_COIN, SUI>>(scenario);
             let pool_ref = &mut pool;
 
+            let coin_b2 = coin::mint_for_testing<SUI>(SuiAddAmount, test_scenario::ctx(scenario));
+            fox_swap::swap_coin_b_to_coin_a(pool_ref, coin_b2, test_scenario::ctx(scenario));
+
+            test_scenario::return_shared(pool);
+        };
+
+        test_scenario::next_tx(scenario, alice);
+        {
+            let mut pool = test_scenario::take_shared<fox_swap::Pool<FOX_COIN, SUI>>(scenario);
+            let pool_ref = &mut pool;
+
+            let coin_a2 = test_scenario::take_from_sender<coin::Coin<FOX_COIN>>(scenario);
+            let coin_b2 = coin::mint_for_testing<SUI>(SuiAddAmount, test_scenario::ctx(scenario));
+            fox_swap::add_liquidity(pool_ref, coin_a2, coin_b2, &clock, test_scenario::ctx(scenario));
+
+            test_scenario::return_shared(pool);
+        };
+
+        clock.destroy_for_testing();
+        test_scenario::end(scenario_val);
+    }
+
+
+    #[test]
+    fun test_fox_lp() {
+        let jason = @0x11;
+        let alice = @0x22;
+
+        let mut scenario_val = test_scenario::begin(jason);
+        let scenario = &mut scenario_val;
+        let mut clock = clock::create_for_testing(test_scenario::ctx(scenario));
+
+        test_scenario::next_tx(scenario, jason);
+        {
+            clock.increment_for_testing(42);
+            let coin_a = coin::mint_for_testing<FOX_COIN>(FoxCreateAmount, test_scenario::ctx(scenario));
+            let coin_b = coin::mint_for_testing<SUI>(SuiCreateAmount, test_scenario::ctx(scenario));
+            fox_swap::create_pool(coin_a, coin_b, &clock, test_scenario::ctx(scenario));
+        };
+
+        test_scenario::next_tx(scenario, alice);
+        {
+            let mut pool = test_scenario::take_shared<fox_swap::Pool<FOX_COIN, SUI>>(scenario);
+            let pool_ref = &mut pool;
+
             let coin_a2 = coin::mint_for_testing<FOX_COIN>(FoxAddAmount, test_scenario::ctx(scenario));
             let coin_b2 = coin::mint_for_testing<SUI>(SuiAddAmount, test_scenario::ctx(scenario));
             fox_swap::add_liquidity(pool_ref, coin_a2, coin_b2, &clock, test_scenario::ctx(scenario));

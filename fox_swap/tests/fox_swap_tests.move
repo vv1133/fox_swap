@@ -19,6 +19,7 @@ module fox_swap::fox_swap_tests {
     const LotteryPoolCreateAmount: u64 = 5000000000000;
     const LotteryPoolAddAmount: u64 = 5000000000000;
 
+    const PUBLIC_KEY: vector<u8> = x"1a90ed7e9e18a9f2db1f7fbabfe002745000b19b44fd68d87d97c6785460714e";
     const ECVRF_PROOF: vector<u8> = x"f82429bb25385cf60e14c5c160d4fb0614c64923308c83e3c2bd9da36efeb63ad594442fcf2f47e82fbc176f5993715999176bc16f699ea3955df3d2a439a7728c95fa324906306c44ff6f0df2833e00";
     const ECVRF_OUTPUT: vector<u8> = x"87cb7951dbb68b628a6fda43236de3544e4a8d70a77b6390e0d1743b1b57091563b5721a15de4befe0247fb06c853ebe13e217ea730e010a9eef4b7544e06a8e";
 
@@ -129,7 +130,8 @@ module fox_swap::fox_swap_tests {
         test_scenario::next_tx(scenario, jason);
         {
             let coin = coin::mint_for_testing<FOX_COIN>(LotteryPoolCreateAmount, test_scenario::ctx(scenario));
-            fox_lottery::create_pool(coin, test_scenario::ctx(scenario));
+            let public_key = PUBLIC_KEY;
+            fox_lottery::create_lottery_pool_a(coin, public_key, test_scenario::ctx(scenario));
 
             clock.increment_for_testing(42);
             let coin_a = coin::mint_for_testing<FOX_COIN>(FoxCreateAmount, test_scenario::ctx(scenario));

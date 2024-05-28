@@ -16,10 +16,10 @@ module fox_swap::fox_lottery {
     const ELotteryVerifyFail: u64 = 4;
 
     const INSTANT_LOTTERY_POOL_ID: u64 = 1;
-    const PUBLIC_KEY: vector<u8> = x"1a90ed7e9e18a9f2db1f7fbabfe002745000b19b44fd68d87d97c6785460714e";
 
     public struct LotteryPoolA<phantom CoinA> has key {
         id: UID,
+        public_key: vector<u8>,
         coin_bal: Balance<CoinA>,
     }
 
@@ -29,7 +29,7 @@ module fox_swap::fox_lottery {
         number: u16,
     }
 
-    public entry fun create_pool<CoinA>(coin_a: Coin<CoinA>, ctx: &mut TxContext) {
+    public entry fun create_lottery_pool_a<CoinA>(coin_a: Coin<CoinA>, public_key: vector<u8>, ctx: &mut TxContext) {
         let coin_amount = coin::value(&coin_a);
 
         assert!(coin_amount > 0, EAmount);
@@ -38,6 +38,7 @@ module fox_swap::fox_lottery {
 
         let pool = LotteryPoolA {
             id: object::new(ctx),
+            public_key,
             coin_bal: coin_balance,
         };
         
@@ -68,7 +69,7 @@ module fox_swap::fox_lottery {
 
         assert!(coupon_lottery_type == INSTANT_LOTTERY_POOL_ID, ELotteryInvalidPool);
         assert!(coupon_epoch + 1 >= epoch(ctx), ELotteryInvalidTime);
-        let public_key = PUBLIC_KEY;
+        let public_key = lottery_pool_a.public_key;
         assert!(ecvrf::ecvrf_verify(&lottery_number, &lottery_input, &public_key, &proof), ELotteryVerifyFail);
 
         let number0 = *vector::borrow<u8>(&lottery_number, 0);
@@ -90,6 +91,9 @@ module fox_swap::fox_lottery {
         } else {
            bonus_coin_amount = 0;
         };
+
+        let pool_coin_amount = balance::value(&lottery_pool_a.coin_bal);
+        assert!(pool_coin_amount >= bonus_coin_amount, EAmount);
 
         if (bonus_coin_amount > 0) {
             let bonus_balance = balance::split(&mut lottery_pool_a.coin_bal, bonus_coin_amount);

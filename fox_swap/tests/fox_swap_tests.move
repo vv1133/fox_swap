@@ -37,7 +37,7 @@ module fox_swap::fox_swap_tests {
             clock.increment_for_testing(42);
             let coin_a = coin::mint_for_testing<FOX_COIN>(FoxCreateAmount, test_scenario::ctx(scenario));
             let coin_b = coin::mint_for_testing<SUI>(SuiCreateAmount, test_scenario::ctx(scenario));
-            fox_swap::create_pool(coin_a, coin_b, &clock, test_scenario::ctx(scenario));
+            fox_swap::create_swap_pool(coin_a, coin_b, &clock, test_scenario::ctx(scenario));
         };
 
         test_scenario::next_tx(scenario, alice);
@@ -82,7 +82,7 @@ module fox_swap::fox_swap_tests {
             clock.increment_for_testing(42);
             let coin_a = coin::mint_for_testing<FOX_COIN>(FoxCreateAmount, test_scenario::ctx(scenario));
             let coin_b = coin::mint_for_testing<SUI>(SuiCreateAmount, test_scenario::ctx(scenario));
-            fox_swap::create_pool(coin_a, coin_b, &clock, test_scenario::ctx(scenario));
+            fox_swap::create_swap_pool(coin_a, coin_b, &clock, test_scenario::ctx(scenario));
         };
 
         test_scenario::next_tx(scenario, alice);
@@ -136,7 +136,7 @@ module fox_swap::fox_swap_tests {
             clock.increment_for_testing(42);
             let coin_a = coin::mint_for_testing<FOX_COIN>(FoxCreateAmount, test_scenario::ctx(scenario));
             let coin_b = coin::mint_for_testing<SUI>(SuiCreateAmount, test_scenario::ctx(scenario));
-            fox_swap::create_pool(coin_a, coin_b, &clock, test_scenario::ctx(scenario));
+            fox_swap::create_swap_pool(coin_a, coin_b, &clock, test_scenario::ctx(scenario));
         };
 
         test_scenario::next_tx(scenario, alice);
@@ -147,12 +147,12 @@ module fox_swap::fox_swap_tests {
             let swap_pool = test_scenario::take_shared<fox_swap::Pool<FOX_COIN, SUI>>(scenario);
 
             let coin2 = coin::mint_for_testing<FOX_COIN>(LotteryPoolAddAmount, test_scenario::ctx(scenario));
-            fox_lottery::add_pool_bonous(lottery_pool_ref, coin2, test_scenario::ctx(scenario));
+            fox_lottery::add_pool_a_bonous(lottery_pool_ref, coin2, test_scenario::ctx(scenario));
 
             let ecvrf_proof = ECVRF_PROOF;
             let ecvrf_output = ECVRF_OUTPUT;
             let coupon = fox_swap::get_coupon_for_testing(328474789, 1, 99999999999, 100, test_scenario::ctx(scenario));
-            fox_lottery::draw_instant_lottery(coupon, &swap_pool, lottery_pool_ref,
+            fox_lottery::draw_pool_a_instant_lottery(coupon, &swap_pool, lottery_pool_ref,
                      ecvrf_output, ecvrf_proof, test_scenario::ctx(scenario));
 
             test_scenario::return_shared(lottery_pool_a);

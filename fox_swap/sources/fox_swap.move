@@ -35,7 +35,7 @@ module fox_swap::fox_swap {
         epoch: u64,
     }
 
-    public entry fun create_pool<CoinA, CoinB>(coin_a: Coin<CoinA>, coin_b: Coin<CoinB>, clock: &Clock, ctx: &mut TxContext) {
+    public entry fun create_swap_pool<CoinA, CoinB>(coin_a: Coin<CoinA>, coin_b: Coin<CoinB>, clock: &Clock, ctx: &mut TxContext) {
         let coin_a_amount = coin::value(&coin_a);
         let coin_b_amount = coin::value(&coin_b);
 

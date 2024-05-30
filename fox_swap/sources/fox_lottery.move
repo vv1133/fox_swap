@@ -45,14 +45,14 @@ module fox_swap::fox_lottery {
         transfer::share_object(pool);
     }
 
-    public entry fun add_pool_bonous<CoinA> (pool: &mut LotteryPoolA<CoinA>, coin_a: Coin<CoinA>, _ctx: &mut TxContext) {
+    public entry fun add_pool_a_bonous<CoinA> (pool: &mut LotteryPoolA<CoinA>, coin_a: Coin<CoinA>, _ctx: &mut TxContext) {
         let coin_amount = coin::value(&coin_a);
         assert!(coin_amount > 0, EAmount);
         balance::join(&mut pool.coin_bal, coin::into_balance(coin_a));
     }
 
     // 即开型彩票
-    public entry fun draw_instant_lottery<CoinA, CoinB>(coupon: Coupon, pool: &Pool<CoinA, CoinB>,
+    public entry fun draw_pool_a_instant_lottery<CoinA, CoinB>(coupon: Coupon, pool: &Pool<CoinA, CoinB>,
         lottery_pool_a: &mut LotteryPoolA<CoinA>, lottery_number: vector<u8>, proof: vector<u8>, ctx: &mut TxContext) {
 
         let coupon_id = fox_swap::get_coupon_id(&coupon);

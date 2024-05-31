@@ -3,6 +3,7 @@
 ## Introduce
 
 FOX Swap is a platform on the Sui blockchain. FOX Swap allows users to engage in transactions and add liquidity, among other activities.
+
 A distinctive feature of this project is that users can acquire Liquidity Provider Tokens (LPs) by adding liquidity. Upon acquiring LPs, users are entitled to claim one free lottery ticket each epoch. FOX Swap features multiple lottery pools, with each offering a unique drawing method. Users can choose to receive lottery tickets from any of these pools. Should a user win in a lottery draw, they are rewarded with Fox tokens as their prize.
 
 ## Structs
@@ -187,11 +188,64 @@ LP=0x9ad48fda7d25ebaa3df6ff1f966e67149337e2e1876507b6fa0920d18e359f0e
 $ sui client call --package $PACKAGE_ID --module fox_swap --function get_daily_coupon --args $SWAP_POOL 1 --type-args $FOX_COIN_PACKAGE_ID::fox_coin::FOX_COIN 0x2::sui::SUI --gas-budget 5000000
 ```
 
+Retrieve the COUPON_OBJ (ObjectType: ...::fox_swap::Coupon) and set it as the environment variable:
+```bash
+COUPON_OBJ=0xf266a310825cecd8b54df8ed0524ea4f4922bf13c7ed61d98915524ad44b6a3f
+```
+
 ### 6. Get Winning Numbers Via Off-Chain Code
 
+Obtaining coupon information through Coupon_obj and suivision.xyz:
+
+```bash
+{
+    "coupon_id":"1717032411204",
+    "epoch":"386",
+    "lottery_type":"1",
+    "lp_amount":"234783942744"
+}
+```
+
+Modify `app/index.ts`,
+
+```bash
+const couponId = "1717032411204";
+const lotteryType = "1";
+const lpAmount = "234783942744";
+const epoch = "386";
+```
+
+Compile and run:
+```bash
+$ npx tsc
+$ node dist/index.js
+
+input:3c9356ee521fc67938612236a44b68d8a2393f394b374f02de98d27fa8c23bb5
+proof:309041bee4eb33bc6a0d0aaa78edac32cfa3f8085f811fa2e19034d1a7d3bb5bf1275da1bbf2045af6e93f530056950a8411c46c0849bd2a27c073b8be586ca888ceee54319899064a58849b6e228f02
+output:9edba6de6d31f7e7162beb079ccc5bfb4e886274eedab7312c406dee0059771a40078089731a02e098a42151d529675a91179886cb5f0ce79463b5e4280670e1
+```
+
+Set environment variables:
+```bash
+PROOF=0x309041bee4eb33bc6a0d0aaa78edac32cfa3f8085f811fa2e19034d1a7d3bb5bf1275da1bbf2045af6e93f530056950a8411c46c0849bd2a27c073b8be586ca888ceee54319899064a58849b6e228f02
+LOTTERY_NUMBER=0x9edba6de6d31f7e7162beb079ccc5bfb4e886274eedab7312c406dee0059771a40078089731a02e098a42151d529675a91179886cb5f0ce79463b5e4280670e1
+```
 
 ### 7. Draw And Claim Prizes
 
+```bash
+$ sui client call --package $PACKAGE_ID --module fox_lottery --function draw_pool_a_instant_lottery --args $COUPON_OBJ $SWAP_POOL $LOTTERY_POOL $LOTTERY_NUMBER $PROOF --type-args $FOX_COIN_PACKAGE_ID::fox_coin::FOX_COIN 0x2::sui::SUI --gas-budget 5000000
+
+│  │   ┌───────────────────┬──────────────┐                                                                     │
+│  │   │ bonus_coin_amount │ 0            │                                                                     │
+│  │   ├───────────────────┼──────────────┤                                                                     │
+│  │   │ lp_amount         │ 234783942744 │                                                                     │
+│  │   ├───────────────────┼──────────────┤                                                                     │
+│  │   │ number            │ 3803         │                                                                     │
+│  │   └───────────────────┴──────────────┘
+```
+
+The output of `bonus_coin_amount` is 0, indicating that the user did not win.
 
 ## Contributing
 

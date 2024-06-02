@@ -51,7 +51,7 @@ Draws an instant lottery and burns the ticket
 ## UNITTEST
 ```bash
 $ sui --version
-sui 1.25.0-homebrew
+sui 1.26.0-homebrew
 
 $ sui move test
 INCLUDING DEPENDENCY fox_coin
@@ -59,10 +59,11 @@ INCLUDING DEPENDENCY Sui
 INCLUDING DEPENDENCY MoveStdlib
 BUILDING fox_swap
 Running Move unit tests
-[ PASS    ] 0x0::fox_swap_tests::test_fox_lottery
+[ PASS    ] 0x0::fox_swap_tests::test_fox_lottery_pool_a
+[ PASS    ] 0x0::fox_swap_tests::test_fox_lottery_pool_b
 [ PASS    ] 0x0::fox_swap_tests::test_fox_lp
 [ PASS    ] 0x0::fox_swap_tests::test_fox_swap
-Test result: OK. Total tests: 3; passed: 3; failed: 0
+Test result: OK. Total tests: 4; passed: 4; failed: 0
 ```
 
 ## Prerequisites

@@ -182,10 +182,12 @@ Retrieve the LP and set it as the environment variable:
 LP=0x9ad48fda7d25ebaa3df6ff1f966e67149337e2e1876507b6fa0920d18e359f0e
 ```
 
-### 5. After One Epoch, Obtain Instant-Win Lottery Tickets Through LP Tokens
+### 5. After One Epoch, Obtain a Lottery Ticket Through LP Tokens With a Choice Between Instant Or Lotto Type.
 
+The following is an example using an instant lottery ticket.
 ```bash
-$ sui client call --package $PACKAGE_ID --module fox_swap --function get_daily_coupon --args $SWAP_POOL 1 --type-args $FOX_COIN_PACKAGE_ID::fox_coin::FOX_COIN 0x2::sui::SUI --gas-budget 5000000
+LOTTERY_TYPE=1 # instant type
+$ sui client call --package $PACKAGE_ID --module fox_swap --function get_daily_coupon --args $SWAP_POOL $LOTTERY_TYPE --type-args $FOX_COIN_PACKAGE_ID::fox_coin::FOX_COIN 0x2::sui::SUI --gas-budget 5000000
 ```
 
 Retrieve the COUPON_OBJ (ObjectType: ...::fox_swap::Coupon) and set it as the environment variable:
@@ -234,7 +236,7 @@ LOTTERY_NUMBER=0x9edba6de6d31f7e7162beb079ccc5bfb4e886274eedab7312c406dee0059771
 ### 7. Draw And Claim Prizes
 
 ```bash
-$ sui client call --package $PACKAGE_ID --module fox_lottery --function draw_pool_a_instant_lottery --args $COUPON_OBJ $SWAP_POOL $LOTTERY_POOL $LOTTERY_NUMBER $PROOF --type-args $FOX_COIN_PACKAGE_ID::fox_coin::FOX_COIN 0x2::sui::SUI --gas-budget 5000000
+$ sui client call --package $PACKAGE_ID --module fox_lottery --function draw_pool_a_instant_lottery --args $COUPON_OBJ $SWAP_POOL $LOTTERY_POOL $LOTTERY_NUMBER $PROOF 0x8 --type-args $FOX_COIN_PACKAGE_ID::fox_coin::FOX_COIN 0x2::sui::SUI --gas-budget 5000000
 
 │  │   ┌───────────────────┬──────────────┐                                                                     │
 │  │   │ bonus_coin_amount │ 0            │                                                                     │

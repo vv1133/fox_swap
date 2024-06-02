@@ -47,34 +47,65 @@ function splitU64ToU8Array(value: string): Uint8Array {
     return new Uint8Array(result);
 }
 
-// 328474789, 1, 99999999999, 100
-const couponId = "328474789";
+function genPoolAOutput(couponId: string, lotteryType: string, lpAmount: string, epoch: string) {
+    let couponIdArray = splitU64ToU8Array(couponId);
+    let lotteryTypeArray = splitU64ToU8Array(lotteryType);
+    let lpAmountArray = splitU64ToU8Array(lpAmount);
+    let epochArray = splitU64ToU8Array(epoch);
+    
+    let totalLength = 8 * 4;
+    let totalArray = new Uint8Array(totalLength);
+    
+    totalArray.set(couponIdArray, 0);
+    totalArray.set(lotteryTypeArray, 8);
+    totalArray.set(lpAmountArray, 16);
+    totalArray.set(epochArray, 24);
+    
+    //console.log(couponIdArray);
+    //console.log(lotteryTypeArray);
+    //console.log(lpAmountArray);
+    //console.log(epochArray);
+    //console.log(totalArray);
+    
+    const hash = sha3_256(totalArray);
+    //console.log("hash:"+hash);
+    
+    getOutput(hash, callback);
+}
+
+
+function genPoolBOutput(coinBalAmount: string, totalTicketsNum: string, epoch: string) {
+    let coinBalAmountArray = splitU64ToU8Array(coinBalAmount);
+    let totalTicketsNumArray = splitU64ToU8Array(totalTicketsNum);
+    let epochArray = splitU64ToU8Array(epoch);
+    
+    let totalLength = 8 * 3;
+    let totalArray = new Uint8Array(totalLength);
+    
+    totalArray.set(coinBalAmountArray, 0);
+    totalArray.set(totalTicketsNumArray, 8);
+    totalArray.set(epochArray, 16);
+    
+    //console.log(coinBalAmountArray);
+    //console.log(totalTicketsNumArray);
+    //console.log(epochArray);
+    //console.log(totalArray);
+    
+    const hash = sha3_256(totalArray);
+    //console.log("hash:"+hash);
+    
+    getOutput(hash, callback);
+}
+
+
+const couponId = "1717032411204";
 const lotteryType = "1";
-const lpAmount = "99999999999";
-const epoch = "100";
-let couponIdArray = splitU64ToU8Array(couponId);
-let lotteryTypeArray = splitU64ToU8Array(lotteryType);
-let lpAmountArray = splitU64ToU8Array(lpAmount);
-let epochArray = splitU64ToU8Array(epoch);
+const lpAmount = "234783942744";
+const poolAEpoch = "386";
+genPoolAOutput(couponId, lotteryType, lpAmount, poolAEpoch);
 
-let totalLength = 8 * 4;
-let totalArray = new Uint8Array(totalLength);
-
-totalArray.set(couponIdArray, 0);
-totalArray.set(lotteryTypeArray, 8);
-totalArray.set(lpAmountArray, 16);
-totalArray.set(epochArray, 24);
-
-//console.log(couponIdArray);
-//console.log(lotteryTypeArray);
-//console.log(lpAmountArray);
-//console.log(epochArray);
-//console.log(totalArray);
-
-const hash = sha3_256(totalArray);
-console.log("hash:"+hash);
-
-getOutput(hash, callback);
-
-
+const coinBalAmount = "5000000000000";
+const totalTicketsNum = "10999999";
+const poolBEpoch = "1";
+genPoolBOutput(coinBalAmount, totalTicketsNum, poolBEpoch);
 

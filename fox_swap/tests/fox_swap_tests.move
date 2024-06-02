@@ -219,15 +219,17 @@ module fox_swap::fox_swap_tests {
 
         test_scenario::next_tx(scenario, jason);
         {
+            let admin_cap = test_scenario::take_from_sender<fox_lottery::PoolBAdminCap>(scenario);
             let r = test_scenario::take_shared<random::Random>(scenario);
             let mut lottery_pool_b = test_scenario::take_shared<fox_lottery::LotteryPoolB<FOX_COIN>>(scenario);
             let swap_pool = test_scenario::take_shared<fox_swap::Pool<FOX_COIN, SUI>>(scenario);
 
             let ecvrf_proof = ECVRF_POOL_B_PROOF;
             let ecvrf_output = ECVRF_POOL_B_OUTPUT;
-            fox_lottery::pool_b_close_betting(&mut lottery_pool_b, test_scenario::ctx(scenario));
-            fox_lottery::pool_b_draw_and_distrubute(&swap_pool, &mut lottery_pool_b, ecvrf_output, ecvrf_proof, &r, test_scenario::ctx(scenario));
+            fox_lottery::pool_b_close_betting(&admin_cap, &mut lottery_pool_b, test_scenario::ctx(scenario));
+            fox_lottery::pool_b_draw_and_distrubute(&admin_cap, &swap_pool, &mut lottery_pool_b, ecvrf_output, ecvrf_proof, &r, test_scenario::ctx(scenario));
 
+            test_scenario::return_to_sender(scenario, admin_cap);
             test_scenario::return_shared(r);
             test_scenario::return_shared(lottery_pool_b);
             test_scenario::return_shared(swap_pool);

@@ -55,6 +55,10 @@ module fox_swap::fox_lottery {
         winner: address,
     }
 
+    public struct PoolBAdminCap has key {
+        id: UID,
+    }
+
     public entry fun create_lottery_pool_a<CoinA>(coin_a: Coin<CoinA>, public_key: vector<u8>, ctx: &mut TxContext) {
         let coin_amount = coin::value(&coin_a);
 
@@ -162,6 +166,11 @@ module fox_swap::fox_lottery {
         };
         
         transfer::share_object(pool);
+
+        let pool_b_admin_cap = PoolBAdminCap {
+            id: object::new(ctx),
+        };
+        transfer::transfer(pool_b_admin_cap, sender(ctx));
     }
 
     public entry fun add_pool_b_bonous<CoinA> (pool: &mut LotteryPoolB<CoinA>, coin_a: Coin<CoinA>, _ctx: &mut TxContext) {
@@ -197,7 +206,7 @@ module fox_swap::fox_lottery {
     }
 
     // 关闭投注乐透型彩票奖池
-    public entry fun pool_b_close_betting<CoinA>(lottery_pool_b: &mut LotteryPoolB<CoinA>, ctx: &mut TxContext) {
+    public entry fun pool_b_close_betting<CoinA>(_: &PoolBAdminCap, lottery_pool_b: &mut LotteryPoolB<CoinA>, ctx: &mut TxContext) {
         lottery_pool_b.frozen = true;
         assert!(lottery_pool_b.epoch < epoch(ctx), ELotteryInvalidTime); // 一个epoch只能开一次奖
         lottery_pool_b.epoch = epoch(ctx);
@@ -208,7 +217,7 @@ module fox_swap::fox_lottery {
 
     // 开奖并发奖
     #[allow(lint(public_random))]
-    public entry fun pool_b_draw_and_distrubute<CoinA, CoinB>(pool: &Pool<CoinA, CoinB>, lottery_pool_b: &mut LotteryPoolB<CoinA>,
+    public entry fun pool_b_draw_and_distrubute<CoinA, CoinB>(_: &PoolBAdminCap, pool: &Pool<CoinA, CoinB>, lottery_pool_b: &mut LotteryPoolB<CoinA>,
              lottery_number: vector<u8>, proof: vector<u8>, r: &Random, ctx: &mut TxContext) {
 
         assert!(lottery_pool_b.frozen, ELotteryUnFrozen);

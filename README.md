@@ -1,10 +1,12 @@
 # Sui Fox Swap
 
-## Introduce
+## Introduction
 
 FOX Swap is a platform on the Sui blockchain. FOX Swap allows users to engage in transactions and add liquidity, among other activities.
 
 A distinctive feature of this project is that users can acquire Liquidity Provider Tokens (LPs) by adding liquidity. Upon acquiring LPs, users are entitled to claim one free lottery ticket each epoch. FOX Swap features multiple lottery pools, with each offering a unique drawing method. Users can choose to receive lottery tickets from any of these pools. Should a user win in a lottery draw, they are rewarded with Fox tokens as their prize.
+
+[Video Introduction](https://www.loom.com/share/64d3c0dd3908427ba0bd89fc9804a2af)
 
 ## Structs
 
@@ -142,7 +144,7 @@ $ SUI_COIN_5_OBJ=0xe5c8acf6375177a808d1893bef1c04e95b64a5196a929827069f1107ef35a
 ### 1. Deploy FOX Swap Contract
 
 ```bash
-$ sui client publish --gas-budget 50000000
+$ sui client publish --gas-budget 100000000
 ```
 
 Retrieve the package_id and set it as the environment variable:
@@ -183,9 +185,14 @@ Retrieve the LP and set it as the environment variable:
 LP=0x9ad48fda7d25ebaa3df6ff1f966e67149337e2e1876507b6fa0920d18e359f0e
 ```
 
-### 5. After One Epoch, Obtain a Lottery Ticket Through LP Tokens With a Choice Between Instant Or Lotto Type.
+### 5. Obtain a Lottery Ticket Through LP Tokens And Participate In the Draw
 
-The following is an example using an instant lottery ticket.
+After one epoch, you can obtain a lottery ticket through LP tokens with a choice between instant Or lotto type.
+
+#### Instant Type
+
+##### 5.1 Obtain a Lottery Ticket With Instant Lottery Ticket
+
 ```bash
 LOTTERY_TYPE=1 # instant type
 $ sui client call --package $PACKAGE_ID --module fox_swap --function get_daily_coupon --args $SWAP_POOL $LOTTERY_TYPE --type-args $FOX_COIN_PACKAGE_ID::fox_coin::FOX_COIN 0x2::sui::SUI --gas-budget 5000000
@@ -196,7 +203,7 @@ Retrieve the COUPON_OBJ (ObjectType: ...::fox_swap::Coupon) and set it as the en
 COUPON_OBJ=0xf266a310825cecd8b54df8ed0524ea4f4922bf13c7ed61d98915524ad44b6a3f
 ```
 
-### 6. Get Winning Numbers Via Off-Chain Code
+##### 5.2 Get Drawing Numbers Via Off-Chain Code
 
 Obtaining coupon information through Coupon_obj and suivision.xyz:
 
@@ -234,7 +241,7 @@ PROOF=0x309041bee4eb33bc6a0d0aaa78edac32cfa3f8085f811fa2e19034d1a7d3bb5bf1275da1
 LOTTERY_NUMBER=0x9edba6de6d31f7e7162beb079ccc5bfb4e886274eedab7312c406dee0059771a40078089731a02e098a42151d529675a91179886cb5f0ce79463b5e4280670e1
 ```
 
-### 7. Draw And Claim Prizes
+##### 5.3 Draw And Claim Prizes
 
 ```bash
 $ sui client call --package $PACKAGE_ID --module fox_lottery --function draw_pool_a_instant_lottery --args $COUPON_OBJ $SWAP_POOL $LOTTERY_POOL $LOTTERY_NUMBER $PROOF 0x8 --type-args $FOX_COIN_PACKAGE_ID::fox_coin::FOX_COIN 0x2::sui::SUI --gas-budget 5000000

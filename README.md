@@ -50,6 +50,21 @@ Adds a bonus to the reward pool.
 ### fox_lottery::draw_pool_a_instant_lottery
 Draws an instant lottery and burns the ticket
 
+### fox_lottery::create_lottery_pool_b
+Creates an lotto lottery reward pool.
+
+### fox_lottery::add_pool_b_bonus
+Adds a bonus to the reward pool.
+
+### fox_lottery::place_bet_to_pool_b
+Place tickets in the prize pool.
+
+### fox_lottery::pool_b_close_betting
+Close the pool.
+
+### fox_lottery::pool_b_draw_and_distrubute
+Draw and distrubute prize.
+
 ## UNITTEST
 ```bash
 $ sui --version

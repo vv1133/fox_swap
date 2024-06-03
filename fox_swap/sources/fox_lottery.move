@@ -82,8 +82,7 @@ module fox_swap::fox_lottery {
     }
 
     // 即开型彩票
-    #[allow(lint(public_random))]
-    public entry fun draw_pool_a_instant_lottery<CoinA, CoinB>(coupon: Coupon, pool: &Pool<CoinA, CoinB>,
+    entry fun draw_pool_a_instant_lottery<CoinA, CoinB>(coupon: Coupon, pool: &Pool<CoinA, CoinB>,
         lottery_pool_a: &mut LotteryPoolA<CoinA>, lottery_number: vector<u8>, proof: vector<u8>, r: &Random, ctx: &mut TxContext) {
 
         let coupon_id = fox_swap::get_coupon_id(&coupon);
@@ -216,8 +215,7 @@ module fox_swap::fox_lottery {
     }
 
     // 开奖并发奖
-    #[allow(lint(public_random))]
-    public entry fun pool_b_draw_and_distrubute<CoinA, CoinB>(_: &PoolBAdminCap, pool: &Pool<CoinA, CoinB>, lottery_pool_b: &mut LotteryPoolB<CoinA>,
+    entry fun pool_b_draw_and_distrubute<CoinA, CoinB>(_: &PoolBAdminCap, pool: &Pool<CoinA, CoinB>, lottery_pool_b: &mut LotteryPoolB<CoinA>,
              lottery_number: vector<u8>, proof: vector<u8>, r: &Random, ctx: &mut TxContext) {
 
         assert!(lottery_pool_b.frozen, ELotteryUnFrozen);

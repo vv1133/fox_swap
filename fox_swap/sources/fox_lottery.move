@@ -107,15 +107,16 @@ module fox_swap::fox_lottery {
 
         let number0 = *vector::borrow<u8>(&lottery_number, 0);
         let number1 = *vector::borrow<u8>(&lottery_number, 1);
-        let number = (((number0 & 0xf) as u16) << 8u8) | (number1 as u16);
+        let number = (((number0 & 0x1f) as u16) << 8u8) | (number1 as u16);
         let lucky_number_u32: u32 = (number as u32) * (random_u16 as u32);
         let lucky_number: u16 = (lucky_number_u32 & 0xffffu32) as u16;
         // 1/8192概率中100%的金额, 10/8192概率中10%的金额, 500/8192概率中1%的金额
         let swap_factor = fox_swap::get_swap_factor(pool); // swap_factor是10000*coin_a/coin_b
-        // b = 10000 * a / swap_factor
-        // a * b = a * 10000 * a / swap_factor = lp * lp
-        // a = sqrt(lp * lp * swap_factor / 10000)
-        let full_bonus_coin_amount = math::sqrt(coupon_lp_amount) * math::sqrt(coupon_lp_amount * swap_factor / 10000);
+        // sui_amt = 10000 * fox_amt / swap_factor
+        // fox_amt * sui_amt = fox_amt * 10000 * fox_amt / swap_factor = lp * lp
+        // fox_amt = sqrt(lp * lp * swap_factor / 10000)
+        // 用户质押为等值的2*fox_amt
+        let full_bonus_coin_amount = math::sqrt(coupon_lp_amount) * math::sqrt(coupon_lp_amount * swap_factor / 10000) * 2;
         let bonus_coin_amount;
         if (lucky_number == 0u16) {
            bonus_coin_amount = full_bonus_coin_amount;
@@ -251,10 +252,11 @@ module fox_swap::fox_lottery {
         // get bonus_coin_amount
         let total_tickets_num = lottery_pool_b.total_tickets_num;
         let swap_factor = fox_swap::get_swap_factor(pool); // swap_factor是10000*coin_a/coin_b
-        // b = 10000 * a / swap_factor
-        // a * b = a * 10000 * a / swap_factor = lp * lp = (total_tickets_num*10000)*(total_tickets_num*10000)
-        // a = sqrt(lp * lp * swap_factor / 10000) = sqrt(total_tickets_num*10000*total_tickets_num*swap_factor)
-        let bonus_coin_amount = math::sqrt(total_tickets_num*10000) * math::sqrt(total_tickets_num* swap_factor) / 500; // 奖励为总奖金池的1/500
+        // sui_amt = 10000 * fox_amt / swap_factor
+        // fox_amt * sui_amt = fox_amt*10000*fox_amt/swap_factor = lp*lp = (total_tickets_num*10000)*(total_tickets_num*10000)
+        // fox_amt = sqrt(lp*lp*swap_factor/10000) = sqrt(total_tickets_num*10000*total_tickets_num*swap_factor)
+        // 用户质押为等值的2*fox_amt
+        let bonus_coin_amount = math::sqrt(total_tickets_num*10000) * math::sqrt(total_tickets_num* swap_factor) / 250; // 奖励为总奖金池的1/500
 
         // get winner and transfer bonus
         i = 0;

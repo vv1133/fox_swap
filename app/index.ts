@@ -98,14 +98,14 @@ function genPoolBOutput(coinBalAmount: string, totalTicketsNum: string, epoch: s
 }
 
 
-const couponId = "1717032411204";
+const couponId = "1717341932355";
 const lotteryType = "1";
 const lpAmount = "234783942744";
-const poolAEpoch = "386";
+const poolAEpoch = "390";
 genPoolAOutput(couponId, lotteryType, lpAmount, poolAEpoch);
 
-const coinBalAmount = "5000000000000";
-const totalTicketsNum = "10999999";
-const poolBEpoch = "1";
+const coinBalAmount = "2000000000000";
+const totalTicketsNum = "894484";
+const poolBEpoch = "390";
 genPoolBOutput(coinBalAmount, totalTicketsNum, poolBEpoch);
 

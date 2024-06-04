@@ -256,7 +256,7 @@ module fox_swap::fox_lottery {
         // fox_amt * sui_amt = fox_amt*10000*fox_amt/swap_factor = lp*lp = (total_tickets_num*10000)*(total_tickets_num*10000)
         // fox_amt = sqrt(lp*lp*swap_factor/10000) = sqrt(total_tickets_num*10000*total_tickets_num*swap_factor)
         // 用户质押为等值的2*fox_amt
-        let bonus_coin_amount = math::sqrt(total_tickets_num*10000) * math::sqrt(total_tickets_num* swap_factor) / 250; // 奖励为总奖金池的1/500
+        let bonus_coin_amount = math::sqrt(total_tickets_num*10000) * math::sqrt(total_tickets_num* swap_factor) / 500; // 奖励为总奖金池的1/1000
 
         // get winner and transfer bonus
         i = 0;

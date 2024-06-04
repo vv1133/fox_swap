@@ -139,6 +139,7 @@ $ ADDRESS=0x5bd66f0b7d9eecf2a05b29f8456f3e69d0ef79c289b613d2ff54c9a4c26fcb00
 $ ADDRESS2=0x389f5a3253ff5e7058ca59ced00b377693ac86fad5721c20ffad36f68a583bfb
 $ MINT_AMOUNT=500000000000
 $ sui client call --package $FOX_COIN_PACKAGE_ID --module fox_coin --function mint --args 0xa6684dda21b3694de0858d340ca3a9c7e4dfb857b188c56985c61413d65c442a $MINT_AMOUNT $ADDRESS --gas-budget 5000000
+...
 ```
 
 ### Request test SUI tokens
@@ -369,7 +370,7 @@ $ sui client call --package $PACKAGE_ID --module fox_lottery --function pool_b_d
 │  │   │ winner            │ 0x389f5a3253ff5e7058ca59ced00b377693ac86fad5721c20ffad36f68a583bfb │             │
 │  │   └───────────────────┴────────────────────────────────────────────────────────────────────┘
 ```
-The output of `winner` is 0x389f5a3253ff5e7058ca59ced00b377693ac86fad5721c20ffad36f68a583bfb , indicating that $ADDRESS2 wins the reward.
+The output of `winner` is `0x389f5a3253ff5e7058ca59ced00b377693ac86fad5721c20ffad36f68a583bfb`, indicating that `$ADDRESS2` wins the reward.
 
 ## Contribution
 

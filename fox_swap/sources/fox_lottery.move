@@ -1,4 +1,4 @@
-/// Module: fox_lottery
+// Module: fox_lottery
 module fox_swap::fox_lottery {
     use std::hash::sha3_256;
     use sui::tx_context::{sender, epoch};
